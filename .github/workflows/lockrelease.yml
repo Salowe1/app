@@ -16,13 +16,11 @@ jobs:
           channel: 'stable'
           architecture: x64
 
-      # Fetch dependencies
+      # Fetch dependencies (skipping pod install)
       - run: flutter pub get
 
-   
-
-      # Build the iOS release version
-      - run: flutter build ios --release --no-codesign
+      # Build the iOS release version without running pod install
+      - run: flutter build ios --release --no-codesign --no-pub
 
       # Prepare Payload directory for IPA creation
       - run: mkdir -p Payload/Runner.app
