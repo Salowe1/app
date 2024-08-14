@@ -19,12 +19,14 @@ jobs:
       # Fetch dependencies
       - run: flutter pub get
 
-      # Regenerate Podfile and install CocoaPods dependencies
-      - name: Setup CocoaPods
+      # Regenerate Podfile, update CocoaPods repository, and install dependencies
+      - name: Regenerate Podfile and Install CocoaPods
         run: |
-          rm -f ios/Podfile  # Regenerate Podfile if necessary
+          rm -f ios/Podfile  # Remove the Podfile if it exists
+          rm -rf ios/Pods ios/Podfile.lock  # Remove old Pods and lockfile
           cd ios
-          pod install
+          pod repo update  # Update CocoaPods repo to avoid outdated specs
+          pod install  # Install the Pods again with a fresh setup
 
       # Build the iOS release version
       - run: flutter build ios --release --no-codesign
