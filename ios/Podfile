@@ -1,9 +1,14 @@
 # Define a global platform for your project
 platform :ios, '12.0'
 
+# Check if SKIP_POD_INSTALL is set, and exit if it is
+if ENV['SKIP_POD_INSTALL'] == 'true'
+  puts 'Skipping pod install...'
+  exit
+end
+
 # Specify the path to the Xcode project
 project 'Runner.xcworkspace'
-
 
 target 'Runner' do
   # Use dynamic frameworks
@@ -11,13 +16,12 @@ target 'Runner' do
   use_modular_headers!
 
   # Firebase pods
-
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
-  pod 'Firebase/Storage' 
-  pod 'Firebase/AppCheck' 
-  pod 'Firebase/Analytics' 
+  pod 'Firebase/Storage'
+  pod 'Firebase/AppCheck'
+  pod 'Firebase/Analytics'
 
   # Add any other pods you need
 
