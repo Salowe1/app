@@ -16,13 +16,27 @@ jobs:
           channel: 'stable'
           architecture: x64
 
+      # Restore Pods Cache
+      - name: Restore Pods Cache
+        uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
       # Fetch dependencies
       - run: flutter pub get
+
+      # Manually run pod install before setting the skip flag
+      - run: |
+          cd ios
+          pod install
 
       # Set environment variable to skip pod install
       - run: export SKIP_POD_INSTALL=true
 
-      # Build the iOS release version without running pod install
+      # Build the iOS release version without running pod install again
       - run: flutter build ios --release --no-codesign
 
       # Prepare Payload directory for IPA creation
@@ -47,3 +61,10 @@ jobs:
           tag: v1.0
           overwrite: true
           body: "Congrats! Your iOS app is built and released."
+
+      # Cache Pods
+      - name: Cache Pods
+        uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
