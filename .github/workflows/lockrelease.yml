@@ -19,20 +19,7 @@ jobs:
       # Fetch dependencies
       - run: flutter pub get
 
-      # Check if Podfile exists and regenerate if necessary
-      - name: Regenerate Podfile and Install CocoaPods
-        run: |
-          if [ ! -f ios/Podfile ]; then
-            echo "Podfile not found, regenerating Podfile and installing pods."
-            cd ios
-            pod init  # Initialize a new Podfile if not present
-            flutter pub get  # Regenerate Podfile from Flutter
-            pod install  # Install Pods
-          else
-            echo "Podfile found, installing pods."
-            cd ios
-            pod install  # Just install Pods if Podfile exists
-          fi
+   
 
       # Build the iOS release version
       - run: flutter build ios --release --no-codesign
